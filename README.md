@@ -7,7 +7,7 @@
 * 본교 2기 졸업생 황대윤 (現 서울대학교 수리과학부 재학중)
 * 본교 3기 졸업생 이종민 (現 한국과학기술원 물리학과 재학중)
 
-본 GitHub repository의 주인은 두 번째 강의자로, 저의 강의 자료만을 포함하고 있습니다.
+본 GitHub repository의 주인은 두 번째 강의자이며, 저의 강의 자료만을 포함하고 있습니다.
 
 <center>
 
@@ -25,8 +25,8 @@
     <tr align="center">
       <td rowspan="2">1월 2일 (월)</td>
       <td align="left">복소함수와 복소적분</td>
-      <td rowspan="2">3 · 4교시</td>
-      <td rowspan="2">7 · 8교시</td>
+      <td rowspan="2">1 · 2교시</td>
+      <td rowspan="2">5 · 6교시</td>
       <td rowspan="2"><a href="https://github.com/absolux-jm/math-travel-2022/blob/main/day1-integration/integration.pdf">integration.pdf</a></td>
     </tr>
     <tr>
@@ -35,8 +35,8 @@
     <tr align="center">
       <td rowspan="2">1월 3일 (화)</td>
       <td align="left">행렬의 기초와 벡터 공간</td>
-      <td rowspan="2">1 · 2교시</td>
-      <td rowspan="2">5 · 6교시</td>
+      <td rowspan="2">3 · 4교시</td>
+      <td rowspan="2">7 · 8교시</td>
       <td rowspan="2"><a href="https://github.com/absolux-jm/math-travel-2022/blob/main/day2-algebra/algebra.pdf">algebra.pdf</a></td>
     </tr>
     <tr>
@@ -45,8 +45,8 @@
     <tr align="center">
       <td rowspan="2">1월 4일 (수)</td>
       <td align="left">유한 상태 기계와 정규 표현식</td>
-      <td rowspan="2">3 · 4교시</td>
-      <td rowspan="2">7 · 8교시</td>
+      <td rowspan="2">1 · 2교시</td>
+      <td rowspan="2">5 · 6교시</td>
       <td rowspan="2"><a href="https://github.com/absolux-jm/math-travel-2022/blob/main/day3-automata/automata.pdf">automata.pdf</a></td>
     </tr>
     <tr>
@@ -55,8 +55,8 @@
     <tr align="center">
       <td rowspan="2">1월 5일 (목)</td>
       <td align="left">미분방정식과의 만남</td>
-      <td rowspan="2">1 · 2교시</td>
-      <td rowspan="2">5 · 6교시</td>
+      <td rowspan="2">3 · 4교시</td>
+      <td rowspan="2">7 · 8교시</td>
       <td rowspan="2"><a href="https://github.com/absolux-jm/math-travel-2022/blob/main/day4-diffeqn/diffeqn.pdf">diffeqn.pdf</a></td>
     </tr>
     <tr>
