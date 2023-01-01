@@ -3,12 +3,10 @@
 ## 강의 개요
 본 활동은 인천과학예술영재학교에서 2023년 1월 2일부터 5일까지 총 4일간 졸업생들이 수학 관련 주제를 재학생들에게 소개하며 진행됩니다.
 
-강의자는 다음과 같습니다.
-* 본교 2기 졸업생 황대윤 (現 서울대학교 수리과학부 재학중)
-* 본교 3기 졸업생 이종민 (現 한국과학기술원 물리학과 재학중)
+본 repository를 소유하고 있는 강의자의 정보는 다음과 같습니다.
+* 3기 졸업생 이종민 (現 한국과학기술원 물리학과 재학중)
 
-본 GitHub repository의 주인은 두 번째 강의자이며, 저의 강의 자료만을 포함하고 있습니다.
-시간 관계상 강의 이후에 자료가 업로드될 예정이니 양해 바랍니다.
+일정상 강의가 이루어진 후에 강의자료가 업로드될 예정이니 양해 바랍니다.
 
 <center>
 
@@ -77,6 +75,7 @@
 --------------
 
 ## 주요 참고 문헌
+다음의 도서 외에도 참고한 여러 자료가 있으며, 각 강의자료의 마지막에 함께 표기하였습니다.
 
 * J. Mathew and R. L. Walker, 『Mathematical Methods of Physics, Second Edition』, W. A. Benjamin, Inc.
 * John B. Fraleigh and Victor J. Katz, 『A First Course in Abstract Algebra』, Addison-Wesley
