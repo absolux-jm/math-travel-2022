@@ -1,0 +1,587 @@
+%! TeX program = lualatex
+\documentclass[11pt]{book}
+\usepackage[color]{../MathLetter-revised}
+\usepackage{../commands}
+\usepackage[italicdiff]{physics}
+
+\setcounter{day}{1}
+\setcounter{page}{1}
+\fontsettingtrue
+\mergedcounterfalse
+\allowdisplaybreaks
+
+\title{처음 접하는 적분 계산법}
+\author{KAIST 물리학과 21학번 이종민}
+\date{January 2, 2023}
+
+\begin{document}
+\maketitle[Lecture Note]
+\section*{서론}
+\begin{MLPar}
+고등학교에 들어온 후로 많은 적분 계산을 해봤을 것입니다.
+적분도 모르는 채로 입학해서 물리학 I 시간에 Gauss 법칙으로 이를 처음 접한 학생들도 분명히 있을 거예요.
+하지만 통상적으로 고등학교까지 배우는 수학, 즉 중등 교육과정 내에서는 아주 간단한 형태의 적분을 만나게 됩니다.
+2학년을 갓 마친 친구들은 Calculus 수업 시간에 극좌표계나 다변수 적분 등도 계산해봤을 것이고요.
+
+그런데 대학에 입학하면, 물리학 및 공학 분야에서는 더 다양하고 많은 수학을 요구하고, 배우게 됩니다.
+새내기 때 미적분학을 듣고, 다음 해에 수리물리학이나 공업수학과 같은 이름을 가진 과목에서 한 해 동안 수학을 더 배우는 것이지요.
+물론 다른 주제들도 많이 다루지만, 이번 강의에서는 언급한 과목들에서 처음 배우는 적분을 다뤄보고자 합니다.
+구체적으로, 복소함수를 이용하는 적분과, 라이프니츠 규칙을 이용하는 적분을 각각 다룰 것입니다.
+
+복소함수를 이용한 적분은 \newterm{유수정리}[residue theorem]를 이용합니다.
+이는
+\[\intr\dd{x} \frac{e^{ax}}{e^x + 1} \quad(0 < a < 1)\]
+과 같은 상상이 잘 안 되는 적분을 셈할 수 있도록 합니다.
+
+라이프니츠 규칙을 이용하는 적분은 다른 이름으로 파인만의 트릭이라고도 부릅니다.
+천재 물리학자 파인만이 자주 사용한 것으로 유명하기 때문이지요.
+이를 이용하면 양자역학 등에서 자주 사용하는
+\[\intr\dd{x} x^{2n} e^{-x^2} \quad\text{for}\quad n=0,\ 1,\ 2, \ldots\]
+와 같은 적분을 계산할 수 있게 됩니다!
+위 적분 문제는 직접 풀어볼 것이니, 조금만 기다려봅시다.
+수리과학을 전공하고 싶어하는 학생, 혹은 이에 대해 이미 공부를 해본 적이 있는 학생이라면 일부러 모호하게 쓰여진 부분이 있음을 감안해주시기 바랍니다.
+\end{MLPar}
+
+
+
+\section{필요한 개념들}
+\begin{MLPar}
+수열, 급수 및 함수의 수렴성, 연속성, 미분과 적분 등을 탐구하는 분야를 해석학이라 합니다.
+그리고 우리도 적분에 대해서 알아보고자 하므로 해석학에서 사용하는 개념을 약간이나마 가져와야 합니다.
+이번 절에서는 우리가 새로운 적분법을 위해 요구되는 개념들에 대해 소개해보고자 합니다.
+물론 위상수학적 개념을 처음부터 언급하며 시작할 것은 아니고, 후반부까지도 각 적분법의 엄밀한 증명을 할 것은 더더욱 아닙니다.
+그냥 해석학이라는 분야에서 이런 내용을 엄밀하게 다루는구나 하고 생각해주시는 것으로도 충분하겠습니다.
+\end{MLPar}
+
+\subsection{함수와 미분}
+\begin{MLPar}
+함수는 다음과 같이 정의됩니다.
+\end{MLPar}
+
+\begin{MLDef}[함수와 관련 정의]
+두 집합 \(X\), \(Y\)가 주어졌을 때 \(X\)에서 \(Y\)로 가는 \newterm{함수}[function] \(f:X \ra Y\)는 곱집합 \(X \times Y\)의 부분집합 중 임의의 \(x\in X\)에 대해 \((x, y)\in f\)인 \(y\in Y\)가 유일하게 존재하는 것이다.
+이를 \(y = f(x)\) 혹은 \(x \sto y\)로 표현하며, \(X\)를 \newterm{정의역}[domain], \(Y\)를 \newterm{공역}[codomain], \(f(X) := \{f(x): x\in X\}\)를 \newterm{치역}[range]이라 부른다.
+\end{MLDef}
+
+\begin{MLPar}
+이로부터 복소함수와 다변수 함수를 정의할 수 있습니다.
+두 함수 모두 새로운 적분을 배우는 데에 활용될 개념이니 잘 기억하도록 합시다.
+\end{MLPar}
+
+\begin{MLDef}[복소함수와 다변수 함수]
+정의역이 \(\C\)의 부분집합이고 공역이 \(\C\)인 함수를 \newterm{복소함수}[complex function]라 정의한다.
+자연수 \(n\ge 2\)에 대해 정의역이 \(\R^n\)의 부분집합이고 공역이 \(\R\)인 함수를 \newterm{다변수 함수}[multivariable function]라 정의한다.%
+\Footnote{비록 다변수 함수를 정의하긴 했지만, 여기서는 \(n=2\)인 이변수 함수만을 사용할 것입니다.}
+
+\remark \(\R\)과 \(\C\)는 각각 실수 집합과 복소수 집합입니다.
+\end{MLDef}
+
+\begin{MLPar}
+즉, 복소함수에 대해서는 복소평면 위의 점 \(z = x + iy \in D\)에 대해 \(f(z)\)는 복소수이며, 실수부와 허수부를 나누어 표현할 수 있습니다.
+만일 실수부를 \(u\), 허수부를 \(v\)라 하면 이는 \(x\)와 \(y\)에 대한 이변수 함수가 되며, 
+\[f(x+iy) = u(x, y) + iv(x, y)\]
+와 같이 표현할 수 있습니다.
+예시를 보기 전에 한 가지만 더 정의해봅시다.
+\end{MLPar}
+
+\begin{MLDef}[복소 해석함수]
+\(z_0\in\C\) 근방에서 적당한 계수 \(c_n\in\C\)가 있어 복소함수 \(f(z)\)가
+\[f(z) = \sumz{n}c_n(z-z_0)^n\]
+꼴의 수렴하는 급수로 표현 가능하면 복소함수가 \(z_0\) 에서 해석적이라고 합니다.
+정의역의 모든 점에서 해석적인 복소함수는 \newterm{복소 해석함수}[complex analytic function]라고 하며, 정의역이 \(\C\)인 경우는 전해석함수{\small (entire function)}라고 합니다.
+\end{MLDef}
+
+\begin{MLPar}
+해석함수는 해석학에서 가장 중요하게 여기는 함수 중 하나입니다.
+또한 해석함수가 존재한다면 이는 테일러 급수로 유일합니다.
+
+\example
+가장 대표적인 복소 함수의 예시로는 복소 지수함수와 복소 삼각함수가 있습니다.
+복소 지수함수와 복소 삼각함수는 복소평면 전체에서 다음의 급수 전개
+\[
+e^z = \sumz{n} \frac{z^n}{n!} \qc
+\sin z  = \sumz{n} \frac{(-1)^n}{(2n+1)!}z^{2n+1} \qc
+\cos z  = \sumz{n} \frac{(-1)^n}{(2n)!}z^{2n}
+\]
+로 정의합니다.
+\(z = x + iy\)를 이용하면 다음의 관계식들을 얻을 수 있습니다.
+\[e^{z} = e^{x}(\cos y + i\sin y)\]
+\[\cos z = \frac{e^{iz}+e^{-iz}}{2} \qand \sin z = \frac{e^{iz} - e^{-iz}}{2i}\]
+첫 관계식에서 \(u(x, y) = e^x \cos y\), \(v(x, y) = e^x \sin y\)임을 알 수 있으며 또한 이들은 모두 전해석함수가 됩니다.
+
+다음으로 중요하게 사용될 개념은 미분입니다.
+복소함수에서 적분을 하면 미분 비스무리한 것이 있을 것이고, 다변수 함수 역시 일변수 함수에 있었던 미분이 확장된 무언가가 있으리라 대략 짐작할 수 있겠지요.
+그 중 하나가 바로 \newterm{편미분}[partial derivative]입니다.
+\end{MLPar}
+
+\begin{MLDef}[편미분]
+열린집합 \(X \subseteq \R^n\)상에 정의된 다변수 함수 \(f: X \rightarrow \R\) 및 점 \(\vb{a} = (a_1, a_2, \ldots, a_n) \in X\)가 있을 때, 변수 \(x_i\ (i=1, 2, \ldots, n)\)에 대한 편미분은 다음과 같이 정의된다.
+\[\frac{\partial f}{\partial x_i} ( \vb{a} ) = \lim_{h \to 0} \frac{f(..., a_i + h, ...) - f(..., a_i, ...)}{h}\]
+'\(\ldots\)'는 \(a_i\)를 제외한 \(\vb{a}\)의 좌표 성분이다.
+\end{MLDef}
+
+\begin{MLPar}
+정의만 보면 뭔가 거창할 수 있지만, 사실 다변수 함수에서 하나의 변수를 제외하고 다른 모든 변수를 상수로 간주하여 미분하는 것에 불과합니다.
+또한 실함수에서의 미분과 비슷하게 복소함수의 미분을 정의할 수 있습니다.
+\end{MLPar}
+
+\begin{MLDef}[복소함수의 미분]\Label{def:cpx-diff}
+복소함수 \(f:D\ra\C\) 및 $z_0\in D$에 대해 다음의 극한값이 존재하면 \(f\)가 \(z_0\)에서 \newterm{복소 미분 가능}[complex differentiable at ]{\footnotesize \(z_0\)}하다고 정의한다.
+\[\lim_{z \to z_0} \frac{f(z) - f(z_0)}{z-z_0}\]
+복소함수가 정의역 안의 모든 점에서 복소 미분 가능하면 이를 \newterm{정칙함수}[holomorphic function]라 한다.
+\end{MLDef}
+
+\begin{MLPar}
+Calculus II를 수강한 학생들은 아마 다변수 함수의 미분이 떠오를 것입니다.
+일변수 실함수에서 미분계수를 계산할 때에는 극한을 보낼 때 왼쪽, 오른쪽에서 접근하는 두 경로만 있었던 것과는 달리, 여기서는 \(z \to z_0\)로 가능한 경로가 무수히 많음을 기억하고 다음 절로 넘어가봅시다.
+\end{MLPar}
+
+
+
+\subsection{복소함수의 기초적 성질}
+\begin{MLPar}
+직전까지 복소함수의 미분에 대해 배웠습니다.
+가령, 실수축을 따라서 접근하는 경로와 허수축을 따라서 접근하는 경로를 생각해보면 위의 극한은
+\begin{align*}
+\lim_{\De x \to 0} &\frac{u(x+\De x, y) + iv(x+\De x, y) - u(x, y) - iv(x, y)}{\De x} \\
+&= \lim_{\De y \to 0}\frac{u(x, y+\De y) + iv(x, y+\De y) - u(x, y) - iv(x, y)}{i\De y}
+\end{align*}
+을 만족시켜야 합니다.
+실수부와 허수부의 극한을 분리하여 생각해보면 이는
+\begin{equation}\Label{eq:cr}
+\pdv{u}{x} = \pdv{v}{y} \qand
+\pdv{v}{x} = -\pdv{u}{y}
+\end{equation}
+와 같음을 알 수 있고, 따라서 복소 미분이 가능하면 \newterm{코시-리만 방정식}[Cauchy-Riemann equation]이라 부르는 위 관계식이 성립하게 됩니다.
+조금 더 엄밀하게는 다음의 미분
+\[
+\pdv{z} = \frac{1}{2}\pqty{\pdv{x} - i\pdv{y}} \qand
+\pdv{\bar{z}} = \frac{1}{2}\pqty{\pdv{x} + i\pdv{y}}
+\]
+을 정의하여 임의의 경로에 대해 접근해도 값이 동일하기 위해서는 
+\[\pdv{f}{\bar{z}}=0\]
+이 만족되어야 한다는 것으로부터 얻을 수 있습니다.
+이는 코시-리만 방정식이 만족되기 위한 충분조건으로 보이지만, 다음 정리의 조건이 만족되면 놀랍게도 필요충분조건이 됩니다.
+\end{MLPar}
+
+\begin{MLThm}[루만-멘코프 정리{\small (Looman-Menchoff Theorem)}]
+열린집합 \(D\in\C\) 위의 두 함수 \(u, v:D\ra\R\)가 다음을 만족한다고 하자.
+\begin{itemize}
+\item \(\pd u/\pd x\), \(\pd u/\pd y\), \(\pd v/\pd x\), \(\pd v/\pd y\)가 존재한다.
+\item \(u+iv:D\ra\C\)는 연속함수이다.
+\end{itemize}
+이 때, \(u, v\)가 코시-리만 방정식을 만족함과 \(u+iv\)가 정칙함수임은 동치이다.
+\end{MLThm}
+
+\begin{MLPar}
+위 정리는 여기서 증명하지는 않으니 참고만 하여도 충분합니다.
+그런데 코시-리만 방정식은 이보다도 아주 멋진 결과를 이끌어냅니다.
+바로 다음의 식
+\[\cint\dd{z} f(z) = 0\]
+으로, 아직 조건은 제시하지 않았음에도 생김새가 아주 깔끔하단 것을 확인할 수 있을겁니다.
+보조정리 하나만 살펴본 뒤 이를 유도해봅시다!
+\end{MLPar}
+
+\begin{MLLem}[그린 정리{\small (Green's Theorem)}\Label{lem:green}]
+함수 \(f, g\) 및 그 편도함수가 경계 \(\mathcal{C}\)를 갖는 영역 \(\mathcal{S}\) 내부에서 연속이면 다음을 만족한다.
+\[\cint(f\dd{x} + g\dd{y}) = \iint_{\mathcal{S}}\pqty{\pdv{g}{x}-\pdv{f}{y}}\dd{x}\dd{y}\]
+\end{MLLem}
+
+\begin{MLPar}
+2학년 학생들은 Calculus II에서 이를 배웠을 것이지만, 다변수 함수에서의 적분을 아직 배우지 않은 학생들이 있을 것입니다.
+대략적인 의미를 설명하자면, 2차원 상에서 어떤 흐름이 있을 때, 좌변의 적분은 영역 전체의 경계를 따라 적분해 회전하는 정도를 계산하는 것이고, 우변의 적분은 미소 면적 각각에서 흐름이 회전하는 정도를 모두 더한 것의 의미를 가진다고 이해할 수 있습니다.
+여기서는 그린 정리 자체를 증명하지는 않겠으며, 본 정리로 넘어가봅시다.
+\end{MLPar}
+
+\begin{MLThm}[코시 정리{\small (Cauchy's Theorem)}]
+복소평면 위의 단순닫힌경로 \(\mathcal{C}\)와 그 내부에서 복소함수 \(f: D \ra \C\)가 정칙이고 \(f'\)가 연속이면 다음이 성립한다.
+\[\cint\dd{z} f(z) = 0\]
+\end{MLThm}
+
+\begin{MLPrf}
+적당한 매개변수 $a \le t \le b$에 대해 경로 \(z(t) = x(t) + iy(t)\) 위에서 \(f(z) = u(x, y) + iv(x, y)\)라 하자.
+그러면 주어진 적분은
+\begin{align*}
+\cint\dd{z} f(z) &= \int_a^b \dd{t} \dv{z}{t} f(z(t)) \\
+&= \int_a^b \dd{t} (x'(t) + iy'(t))(u(x(t), y(t)) + iv(x(t), y(t))) \\
+&= \int_{\mathcal{C}} (u(x, y) \dd{x} - v(x, y) \dd{y}) \\
+&\qquad\qquad + i\int_{\mathcal{C}} (v(x, y)\dd{x} + u(x, y)\dd{y})
+\end{align*}
+로 표현할 수 있으며, 이는 식~\ref{eq:cr}과 \ref{lem:green}에 의해
+\begin{align*}
+\int_{\mathcal{C}} & (u(x, y) \dd{x} - v(x, y) \dd{y}) + i\int_{\mathcal{C}} (v(x, y)\dd{x} + u(x, y)\dd{y}) \\
+&= \iint_{\mathcal{S}} \pqty{\pdv{v}{x} + \pdv{u}{y}} \dd{x} \dd{y} + i\iint_{\mathcal{S}} \pqty{\pdv{u}{x} - \pdv{v}{y}} \dd{x} \dd{y} \\
+&= 0
+\end{align*}
+임을 알 수 있다.
+\end{MLPrf}
+
+\begin{MLPar}
+이후에 프랑스의 수학자 구르사가 더 완화된 조건에서 같은 결과를 이끌어내는데 성공했으며, 이는 다음과 같습니다.
+\end{MLPar}
+
+\begin{MLThm}[코시-구르사 정리{\small (Cauchy-Goursat Theorem)}]
+단순연결영역 \(\mathcal{S}\)에서 복소함수가 정칙이면 \(\mathcal{S}\) 내부의 단순닫힌경로 \(\mathcal{C}\)에 대해 다음이 성립한다.
+\[\cint \dd{z} f(z) = 0\]
+\end{MLThm}
+
+\begin{MLPar}
+이제 우리는 더 복잡한 내용으로 나아갈 준비가 되었습니다.
+\end{MLPar}
+
+
+
+\section{복소함수를 이용한 적분}
+\begin{MLPar}
+그런데 적분해서 0인건 그렇다 치고, 우리는 복소적분을 써서 이상한 적분을 계산한다고 했지 않았나요?
+실수축 위에서의 적분을 계산한다 했는데, 경로를 따라 적분하는건 뭘까요?
+서론에서 언급한 유수정리는 언제 만날 수 있을까요?
+이번 절에서는 이에 대한 의문을 풀기 위해 직접 복소함수의 \newterm{경로적분}[contour integral]을 몇 가지 계산해보고 내용을 발전시켜보도록 하겠습니다.
+
+\example
+점 \(z_0\in\C\)를 포함하는 임의의 경로를 따라 다음의 적분을 계산해봅시다.%
+\Footnote{반시계방향을 따라 적분하는 것을 양의 방향으로 생각합니다.}
+\[\cint\dd{z} \frac{1}{(z-z_0)^n} \quad n \in \Z\]
+우리는 코시-구르사 정리로부터 적분의 경로를 편하게 바꿀 수 있게 되었습니다.
+\(\abs{z-z_0}=r\)인 원을 따라 적분해도 충분합니다.
+이제 \(z = z_0 + e^{i\ta}\) (\(0 \le \ta \le 2\pi\))라 두면 \(\dd{z} = ire^{i\ta}\dd{\ta}\)가 되고, 경로적분은
+\[\cint\dd{z} \frac{1}{(z-z_0)^n} = \frac{1}{r^n}\int_0^{2\pi} \dd{\ta} ie^{i(1-n)\ta}\]
+의 결과를 줍니다.
+이는 \(n=1\)일 때 \(2\pi i\), 그렇지 않을 때 0이 됩니다.
+이를 \newterm{크로네커 델타}[Kronecker delta]라는 기호를 이용하면 조금 더 깔끔히 표현할 수 있습니다.
+\[\cint\dd{z} \frac{1}{(z-z_0)^n} = 2\pi i \de_{n, 1}\]
+\end{MLPar}
+
+\begin{MLPar}
+그렇다면, 경로 및 그 내부에서 해석적인 복소 해석함수에 대해서 다음의 적분을 고려해봅시다.
+\[\cint\dd{z}\frac{f(z)}{(z-z_0)^n} \quad n\in\N\]
+복소 해석함수는
+\[f(z) = \sumz{m}\frac{f^{(m)}(z_0)}{m!}(z-z_0)^m\]
+의 급수 형태로 전개가 가능했던 것을 생각하면 위의 적분은 곧
+\[\sumz{m}\cint\dd{z}\frac{f^{(m)}(z_0)}{m!}(z-z_0)^{m-n} = \frac{2\pi i}{(n-1)!}f^{(n-1)}(z_0)\]
+꼴로 계산이 됩니다.
+즉, 해석함수의 도함수 값은 적분으로 계산이 가능합니다!
+
+더욱 흥미로운 것은, 복소함수는 한 번만 미분 가능해도 무한 번 미분 가능하다는 아주 좋은 성질을 가지고 있습니다.
+즉, 정칙함수이면 해석함수라는 것입니다.
+그래서 해석학에서와는 달리, 복소해석학에서는 정칙함수와 해석함수를 잘 구분하지 않고 서술하는 경우가 많습니다. 
+위 사실을 증명하기 위해서는 다음의 공식을 먼저 유도해야 합니다.
+\end{MLPar}
+
+\begin{MLThm}[코시 적분 공식{\small (Cauchy Integral Formula)}]
+\(z_0 \in \C\) 근방에서 정칙함수 \(f\)에 대해 경로 \(\mathcal{C}\)를 해당 근방에 속하는 \(z_0\)를 중심으로 하는 원이라 하자.
+이 때, 원 내부의 임의의 점 \(z\)에 대해 다음이 성립한다.
+\[f(z) = \frac{1}{2\pi i}\cint\dd{w}\frac{f(w)}{w-z}\]
+\end{MLThm}
+
+\begin{MLPar}
+위 정리는 엡실론-델타 논법을 사용하여 증명할 수 있습니다.
+더 나아가서, 다음의 과정에 의해 정칙함수가 해석함수가 됨을 보일 수 있으며, 테일러 급수의 계수를 깔끔하게 표현할 수 있게 됩니다.
+\begin{align*}
+f(z) &= \frac{1}{2\pi i}\cint\dd{w}\frac{f(w)}{(w-z_0)-(z-z_0)} \\
+&= \frac{1}{2\pi i}\cint\dd{w}\frac{1}{1-(z-z_0)/(w-z_0)}\frac{f(w)}{w-z_0} \\
+&= \frac{1}{2\pi i}\cint\dd{w}\sumz{n}\pqty{\frac{z-z_0}{w-z_0}}^n \frac{f(w)}{w-z_0} \\
+&= \frac{1}{2\pi i}\cint\dd{w}\sumz{n}(z-z_0)^n \frac{f(w)}{(w-z_0)^{n+1}} \\
+&= \sumz{n} a_n (z-z_0)^n \quad\text{where}\quad a_n = \frac{1}{2\pi i}\cint\dd{w}\frac{f(w)}{(w-z_0)^{n+1}}
+\end{align*}
+\begin{equation}\Label{eq:cdf}
+f^{(n)}(a) = \frac{n!}{2\pi i}\cint\dd{z}\frac{f(z)}{(z-a)^{n+1}}
+\end{equation}
+
+\remark
+위 계산 이전에 먼저 테일러 급수는 정칙함수임을 코시-리만 방정식을 이용해 보여야 합니다.
+그리고 마지막 줄로 넘어가는 계산 과정에서 급수와 적분의 순서를 바꾸었는데, 이는 균등수렴을 보일 수 있기 때문입니다.
+마지막 식이 수렴하는 테일러 급수가 되어 정칙함수이면 해석함수가 됩니다.
+해석학적 지식이 더 필요하여 엄밀한 증명은 생략하였습니다.
+
+이제 복소적분을 사용하는 몇 가지 예시를 살펴보도록 합시다.
+\end{MLPar}
+
+\begin{MLPar}
+\example
+다음 적분을 계산해봅시다.
+\[\intr\dd{x}\frac{1}{x^2+1}\]
+이는 삼각치환으로 쉽게 적분이 가능하지만, 여기서는 복소적분을 이용해 계산해봅시다.
+두 가지의 방법이 있으며, 경로는 모두 복소평면의 윗쪽의 점 \(z=i\)와 실수축을 포함하는 반원입니다.
+
+\hintbox{풀이1}
+다음의 적분을 생각해봅시다.
+\[\cint\dd{z}\frac{1}{z^2+1}=\cint\dd{z}\frac{1}{(z+i)(z-i)}\]
+주어진 경로 및 그 내부에서는 \(1/(z+i)\)가 해석적입니다.
+따라서 식~\ref{eq:cdf}에 의해 적분값은 \(\pi\)가 됩니다.
+반원의 반지름을 무한대로 극한을 보내면 호 부분의 적분은 0이 됩니다.
+따라서 구하고자 하는 적분은
+\[\intr\dd{x}\frac{1}{x^2+1}=\pi\]
+입니다.
+
+\hintbox{풀이2}
+윗쪽 반원 경로 내에 을 포함하는 다음의 적분을 생각해봅시다.
+\[\cint\dd{z}\frac{1}{z-i} = \cint\dd{z}\frac{z+i}{z^2+1}\]
+좌변의 적분 값은 \(2\pi i\)와 같음을 이미 알고 있습니다.
+그런데
+\[\cint\dd{z}\frac{z}{z^2+1} = \cint\dd{z}\dv{z}\pqty{\frac{1}{2}\ln(z^2+1)}=\pi i\]
+이 되어 우변이 
+\[\pi i + i\cint\dd{z}\frac{1}{z^2+1}\]
+와 같아집니다.%
+\Footnote{앞의 경로적분을 직접 계산하면 시작점과 끝점의 위상이 달라서 그 값이 0이 아니게 됩니다.
+이는 복소 로그함수의 특성에 기인하며, 다가함수(multi-valued function) 및 가지 절단(branch cut)의 개념과도 이어집니다.
+이 글에서는 그러한 내용까지 다루지는 않습니다.}
+반원의 경로는 실수축과 호 부분으로 구성되어 있음을 생각하고 경로의 반지름을 무한대로 극한을 보내면 호 부분의 적분 값은 \(0\)으로 수렴합니다.
+그러므로 이는
+\[\pi i + i\intr\dd{x}\frac{1}{x^2+1}\]
+과 같고, 따라서 같은 결과를 얻습니다.
+
+\example
+다음 적분을 계산해봅시다.
+\[\int_0^{\infty}\dd{x}\frac{\cos x}{x^2+1}\]
+\hintbox{풀이}
+앞의 예시와 같은 경로를 따라 다음의 복소 적분
+\[\cint\frac{e^{iz}}{1+z^2}\]
+을 계산하면 됩니다.
+식 \ref{eq:cdf}를 이용하면 위 값이 \(2\pi i \times e^{-1}/2i = \pi/e\)임을 얻습니다.
+실수축 위의 적분은 구하고자 하는 값의 두 배, 호를 따라 계산한 복소적분은 0이 되어
+\[\int_0^{\infty}\dd{x}\frac{\cos x}{x^2+1} = \frac{\pi}{2e}\]
+가 답이 됩니다.
+
+놀랍지 않나요?
+복소평면에서 적분하고 적당한 조작을 가하면 그 답이 나옵니다.
+그런데 서론에서 언급한 유수정리를 사용하면 이러한 결과를 조금은 더 우아하게 표현할 수 있습니다.
+이를 위해서는 정칙함수에 대해 테일러 급수를 일반화한 로랑 급수를 살펴보아야 합니다.
+\end{MLPar}
+
+\begin{MLDef}[로랑 급수{\small (Laurant Series)}]
+로랑 급수는 점 \(z_0\in\C\)를 중심으로 영역 \(r < \abs{z-z_0} < R\)에서 정의된 정칙함수 \(z \sto f(z)\)를 전개한 다음 꼴의 급수이다.
+\[f(z)=\sum_{n=-\infty}^{\infty}c_n(z-z_0)^n \quad\text{where}\quad c_n = \frac{1}{2\pi i}\cint\dd{w}\frac{f(w)}{(w-z_0)^{n+1}}\]
+\end{MLDef}
+
+\begin{MLPar}
+\(c_n\)을 대입하고 급수의 합 범위를 적절히 나눈 후, 경로를 지정해 우변을 계산하면 그 값이 좌변과 같음을 보일 수 있습니다.
+그리고 이로부터 다음을 알 수 있습니다.
+\[\cint\dd{z}f(z) = 2\pi i c_{-1}\]
+즉, 경로적분의 결과를 단순히 \(c_{-1}\)의 값만 계산해도 얻어낼 수 있다는 것입니다!
+해당 계수의 이름은 \newterm{유수}[residue]라고 부르며, 경로로 둘러쌓인 영역 내 모든 특이점에서의 유수를 모두 합하여 경로적분을 계산할 수 있다는 것을 \newterm{유수정리}[residue theorem]라고 합니다.
+
+유수를 어떻게 계산할 수 있을까요?
+복소함수가 \(z=z_0\)를 제외한 근방에서는 해석적이나 해당 점에서는 해석적이지 않을 때, \(z_0\)를 \newterm{특이점}[singular point]이라고 합니다.
+이러한 특이점은 다음과 같이 구분할 수 있습니다.
+\begin{itemize}
+\item 제거 가능한 특이점: \(\lim_{z\to z_0}(z-z_0)f(z)=0\)인 경우
+\item 극점: 적당한 \(n\in\N\)에 대해 \(\lim_{z\to z_0}(z-z_0)^n f(z)\)이 수렴하는 경우
+\item 본질적 특이점: 위 두 경우가 아닌 경우
+\end{itemize}
+제거 가능한 특이점에서는 정의에 의해 유수가 0입니다.
+그리고 복소함수를 극점에서 로랑급수로 전개했을 때, 분모의 최대 차수를 극점의 계수라고 합니다.
+계수가 \(n\)인 극점에서는 유수를 쉽게 구할 수 있으며, 다음을 따릅니다.
+\begin{equation}\Label{eq:res}
+\Res_{z=z_0} f(z) = \frac{1}{(n-1)!}\eval{\dv[n]{z}\bqty{(z-z_0)^n f(z)}}_{z=z_0}
+\end{equation}
+앞에서의 예제들 역시 유수정리를 이용하면 깔끔하게 계산할 수 있으며, 기존에는 상상도 못했던 적분조차 계산할 수 있게 됩니다.
+
+\example
+다음을 계산해봅시다.
+\[\intr\dd{x}\frac{e^{ax}}{e^x+1} \quad (0 < a < 1)\]
+이는 복소적분
+\[\cint\dd{z}\frac{e^{az}}{e^z+1}\]
+형태를 연상시킵니다.
+극점의 위치가 \(n\in\Z\)에 대해 \((2n+1)\pi i\)라는 점을 생각하면 직선 \(\Im z = 0\) 및 \(\Im z = 2\pi\)로 둘러쌓인 직사각형 경로를 생각해볼 수 있습니다.
+직사각형의 양쪽 변에서의 경로적분은 극한을 취했을 때 0이 되므로 이는
+\[\intr\dd{x}\frac{e^{ax}}{e^x+1} - \intr\dd{x}\frac{e^{a(x+2\pi i)}}{e^{x+2\pi i}+1}\]
+과 같으며, 곧 구하고자 하는 적분 값의 \((1-e^{2\pi ia})\)배가 됩니다.
+한편, \(z=\pi i\)에서의 유수를 구하면 \(-e^{\pi ia}\)임을 알 수 있으며, 따라서 구하고자 하는 적분의 결과는 다음과 같게 됩니다.
+\[\intr\dd{x}\frac{e^{ax}}{e^x+1} = 2\pi i \cdot (-e^{\pi ia}) \cdot \frac{1}{1-e^{2\pi ia}} = \frac{\pi}{\sin \pi a}\]
+\end{MLPar}
+
+
+
+\section{라이프니츠 규칙을 이용한 적분}
+\begin{MLPar}
+이번 절에서는 전혀 다른 방식의 적분법을 알아보고자 합니다.
+이상적분{\small (improper integral)}의 경우 엄밀한 정의는 도입하지 않되 예시에서 이용할 것이라서 간단히 소개하고자 합니다.
+거칠게 말하면 하한 혹은 상한(또는 둘 모두)이 극한으로 표현되는 정적분으로, 주로 구간의 양 끝 점에서만 정의되지 않는 함수 혹은 무한대까지의 적분을 시도하는 경우에 맞닥뜨리게 됩니다.
+다음의 직관적인 예시로 설명을 대신하겠습니다.
+가장 마지막 예시와 같이 값이 수렴하지 않는 경우도 있으니 주의하여 계산하여야 하지만, 본문에서 그러한 예시는 다루지 않고자 합니다.
+\begin{align*}
+    \int_{1}^{\infty}\dd{x} \frac{1}{x^2} =& \lim_{s \to \infty}\bqty{-\frac{1}{x}}_{1}^{s} = 1 \\
+    \int_{0}^{1}\dd{x} \frac{1}{2\sqrt{x}} =& \lim_{s \to 0} \bqty{\sqrt{x}}_{s}^{1} = 1 \\
+    \int_{-\infty}^{\infty}\dd{x} x \sin x &=
+    \lim_{s \to -\infty} \lim_{t \to \infty} \bqty{-x \cos x + \sin x}_{s}^{t} \ra \text{발산}
+\end{align*}
+
+이제 라이프니츠의 적분법을 알아봅시다.
+\end{MLPar}
+
+\begin{MLThm}[라이프니츠의 적분법{\small (Leibniz's Rule)}]
+$x-t$ 평면에서 정의된 이변수 함수 $f: \R^2 \ra \R$에 대해 $f$ 및 $\pdv{f}{x}$가 연속이라 가정하자. 유계이고 미분가능한 두 실함수 $a, b: \R \ra \R$에 대해 다음이 성립한다.
+\begin{align*}
+    \dv{x} \int_{a(x)}^{b(x)} \dd{t} f(x, t) &= \int_{a(x)}^{b(x)}\dd{t} \frac{\partial f(x, t)}{\partial x} \\
+    &+ f(x, b(x)) \cdot \dv{(b(x))}{x} - f(x, a(x)) \cdot \dv{(a(x))}{x}
+\end{align*}
+\end{MLThm}
+
+\begin{MLPrf}
+미분의 정의를 이용하여 증명하자.
+정리에 서술된 좌변의 피 미분항은 $t$에 대한 정적분 항이므로 $F(x)$라 칭할 수 있다.
+그러면 다음이 성립함을 알 수 있다.
+\begin{align*}
+    \dv{x} F(x) &= \lim_{h \to 0} \frac{F(x+h) - F(x)}{h} \\
+    &= \lim_{h \to 0} \frac{1}{h}\pqty{ \int_{a(x+h)}^{b(x+h)}\dd{t} f(x+h, t) - \int_{a(x)}^{b(x)}\dd{t} f(x, t)} \\
+    &= \lim_{h \to 0} \frac{1}{h}\pqty{\int_{a(x)}^{b(x)}\dd{t} f(x+h, t) - \int_{a(x)}^{b(x)}\dd{t} f(x, t)} \\
+    &+ \frac{1}{h}{\int_{a(x+h)}^{a(x)}\dd{t} f(x+h, t)} + \frac{1}{h}{\int_{b(x)}^{b(x+h)}\dd{t} f(x+h, t)}
+\end{align*}
+얻어진 마지막 식에서 첫 항의 극한은 곧바로 정리에서의 우변의 첫 항이며, 뒤의 두 항의 극한은 적분의 평균값 정리로부터 극한값이 정리에서의 우변의 남은 항들과 같아진다.
+\end{MLPrf}
+
+\begin{MLPar}
+또한 특별히, 적분의 양 끝을 상수함수로 둠으로써 다음의 따름정리를 얻을 수 있습니다.
+\end{MLPar}
+
+\begin{MLCor}[파인만의 트릭{\small (Feynmann's Trick)}]
+$x-t$ 평면에서 정의된 이변수 함수 $f \colon \R^2 \to \R$에 대해 $f$ 및 $\pdv{f}{x}$가 연속이라 가정하자.
+이때, 두 상수 $a, b$ 에 대해 다음이 성립한다.
+\[\dv{x}\int_{a}^{b}\dd{t} f(x, t) = \int_{a}^{b} \dd{t} \pdv{f}{x} \pqty{x, t}\]
+\end{MLCor}
+
+\begin{MLPar}
+위의 따름정리가 바로 파인만이 강력하게 이용한 적분 방법입니다!
+이후로는 위 적분법을 어떻게 응용할 수 있는지를 알아봅시다.
+\end{MLPar}
+
+
+
+\subsection{몇몇 예시들}
+\begin{MLPar}
+라이프니츠 적분법을 활용한 가장 유명하고도 간단한 적분의 예시를 몇 가지 살펴봅시다.
+본 예시들에서는 이상적분에 대해서 위 따름정리를 이용한 것이지만 수렴하는 상황에서는 충분히 적용할 수 있습니다.
+
+\example
+0 이상의 정수 $n$에 대한 다음 적분의 일반항을 구해봅시다.
+(단, $a \in \R$)
+
+\[\int_{0}^{\infty}\dd{x} x^n e^{-ax^2}\]
+
+\hintbox{풀이}
+익히 결과가 알려진 경우로 $n$이 0 또는 1인 상황이 있습니다.
+$n=0$인 경우는 극좌표계를, $n=1$인 경우는 치환적분을 이용하여 다음과 같은 결과를 얻을 수 있으며, 본문에서 이를 직접 계산하지는 않았습니다.
+\begin{align*}
+    \int_{0}^{\infty} \dd{x} e^{-ax^2} &= \frac{1}{2} \sqrt{\frac{\pi}{a}} \\
+    \int_{0}^{\infty} \dd{x} x e^{-ax^2} &= \frac{1}{2a}
+\end{align*}
+이제 $a$를 변수로 취급합시다.
+두 식을 $a$로 미분하고 부호를 바꿔주면, 파인만의 트릭을 이용해 다음이 성립함을 확인할 수 있습니다.
+\begin{align*}
+    \int_{0}^{\infty} \dd{x} x^2 e^{-ax^2} &= \frac{1}{4} \sqrt{\frac{\pi}{a^3}} \\
+    \int_{0}^{\infty} \dd{x} x^3 e^{-ax^2} &= \frac{1}{2a^2}
+\end{align*}
+따라서 $a$에 대한 미분을 반복하면, 상당한 기술을 요할 것 같이 보였던 위 적분의 일반항을 $n$이 짝수인 경우와 홀수인 경우로 나누어 얻을 수 있습니다.
+\begin{align*}
+    \int_{0}^{\infty}\dd{x} x^{2k} e^{-ax^2} &= \frac{(2k)!}{2^{2k+1} k!} \sqrt{\frac{\pi}{a^{2k+1}}}\\
+    \int_{0}^{\infty}\dd{x} x^{2k+1} e^{-ax^2} &= \frac{k!}{2a^{k+1}}
+\end{align*}
+여기서 $k$는 0 이상의 정수입니다.
+여기서 감마함수{\small (gamma function)}를 이용하면 기우성을 고려할 필요 없이 이를 아주 간결하게 나타낼 수 있습니다.
+\[\int_{0}^{\infty}\dd{x} x^n e^{-ax^2} = \frac{\Gamma \pqty{\frac{n+1}{2}}}{a^{(n+1)/2}}\]
+감마함수는 팩토리얼 연산을 일반화한 함수로 $\alpha$가 음의 정수가 아닌 실수일 때 다음과 같이 정의됩니다.
+\[\Gamma (\alpha) := \int_{0}^{\infty}\dd{x} x^{\alpha} e^{-x}\]
+
+이를 이용하여 위 점화식의 일반항 표현이 옳은지 직접 확인해보는 것도 하나의 연습문제가 될 것입니다.
+
+\example
+다음은 Dirichlet 적분으로도 불리는 적분 식입니다.
+파인만의 트릭을 어떻게 이용할 수 있을지 잠시 생각해보고, 다음 페이지의 풀이를 읽어봅시다.
+\[\int_{0}^{\infty} \frac{\sin x}{x} d x = \frac{\pi}{2}\]
+
+\hintbox{풀이}
+0 이상의 상수 $a$에 대해 다음 식을 생각합시다.
+\[I(a) = \int_{0}^{\infty}\dd{x} \frac{e^{-ax} \sin x}{x}\]
+0보다 큰 실수 $x$에 대해서 $\abs{\frac{\sin x}{x}} < 1$이 성립하므로 위의 적분값의 절댓값이 $e^{-ax}$을 적분한 값에 유계가 되고, $a$를 무한대로 보내는 극한을 취하면 상한의 값이 0이 되므로 $\lim_{a \to \infty} I(a) = 0$입니다.
+이제 함수 $I$를 $a$에 대해서 미분하면 다음이 성립합니다.
+\[I'(a) = - \int_{0}^{\infty}\dd{x} e^{-ax} \sin x\]
+위는 부분적분을 이용하여 계산이 가능하며, 그 결과는 $-\frac{1}{a^2 + 1}$가 됩니다.
+다시 이를 $a$에 대해 적분하고 앞에서 얻었던 결과를 이용하면 다음이 성립합니다.
+\[I(a) = \frac{\pi}{2} - \tan^{-1} a\]
+우리가 구하고자 하는 값은 $I(0)$의 값과 같으므로, 보이고자 했던 바가 얻어집니다.
+
+\example
+마지막으로 다뤄볼 문제는 양의 정수 $m$에 대한 다음 적분입니다.
+어떻게 인자를 추가해야 할지 고민해보고, 다음 페이지의 풀이를 읽어봅시다.
+\[I_m = \int_{-\infty}^{\infty}\dd{x} \frac{1}{(1 + x^2)^m}\]
+
+\hintbox{풀이}
+양수 $b$에 대해 다음 적분식을 생각해봅시다.%
+\Footnote{\(b^2\) 대신 \(b\)를 사용해도 됩니다.}
+\[J_m(b) = \int_{-\infty}^{\infty}\dd{x} \frac{1}{(1 + b^2 x^2)^m}\]
+이 때, \(m = 1\)인 상황의 적분값은 치환적분을 통해 $\pi/b$임을 계산할 수 있습니다.
+이제 $J_m(b)$을 $b$에 대해 미분해봅시다.
+\begin{align*}
+    J_m'(b) &= -2mb \times \int_{-\infty}^{\infty}\dd{x} \frac{x^2}{(1 + b^2 x^2)^{m+1}} \\
+    &= -\frac{2m}{b} \times \int_{-\infty}^{\infty}\dd{x} \frac{(1 + b^2 x^2) - 1}{(1 + b^2 x^2)^{m+1}} \\
+    &= -\frac{2m}{b} J_m(b) + \frac{2m}{b} J_{m+1}(b)
+\end{align*}
+위 식으로부터 다음 관계식을 얻을 수 있습니다.
+\[J_{m+1}(b) = J_m(b) + \frac{b}{2m} J_m'(b)\]
+그런데 적당한 수열 $a_m$에 대해 $J_m(b) = a_m/b$이 성립한다고 보고 위 식에 대입하면
+\begin{align*}
+    \frac{a_{m+1}(b)}{b} =&\, \frac{a_m}{b} - \frac{a_m}{2mb} = a_m \times \pqty{1 - \frac{1}{2m}} \frac{1}{b} \\
+    a_{m+1} =&\, a_m \times \frac{2m - 1}{2m}
+\end{align*}
+이 성립함을 알 수 있습니다.
+\(J_1(b)\)의 형태는 \(a_1 = \pi\)인 형태이므로 위 점화식에서 바로 다음 결과를 얻을 수 있습니다.
+\[J_m(b) = \frac{1}{2} \cdot \frac{3}{4} \cdots \frac{2m-1}{2m} \frac{\pi}{b} = \frac{(2m)!}{2^{2m} (m!)^2} \frac{\pi}{b}\]
+구하고자 하는 결과는 $J_m(1)$이므로, 다음 결과로 정리됩니다.
+\[I_m = J_m(1) = \int_{-\infty}^{\infty}\dd{x} \frac{1}{(1 + x^2)^m} = \frac{(2m)!}{2^{2m} (m!)^2} \pi\]
+\end{MLPar}
+
+\newpage
+
+
+
+\section{연습문제}
+\begin{MLPar}
+하단의 문제들은 파인만의 트릭에 관한 연습문제입니다.
+경로적분에 대한 더 많은 예시는 하단의 링크를 참고해주시면 됩니다.%
+\Footnote{\url{https://math.mit.edu/~jorloff/18.04/notes/topic4.pdf}}
+\end{MLPar}
+
+\begin{prob}{Day 1-1}
+다음을 치환적분과 파인만의 트릭으로 각각 계산해보자.
+\[
+\int_{0}^{\infty}\dd{x} \frac{\ln(1+x^2)}{1+x^2} = \pi \ln 2
+\]
+\end{prob}
+\medskip
+
+\begin{prob}{Day 1-2}
+다음을 치환적분과 파인만의 트릭으로 각각 계산해보자.
+\[
+\int_{0}^{\pi/2}\dd{x} \frac{x}{\tan x} = \frac{\pi \ln 2}{2}
+\]
+\end{prob}
+\medskip
+
+\begin{prob}{Day 1-3}
+다음을 파인만의 트릭으로 계산해보자.
+\[
+\int_{0}^{1}\dd{x} \frac{x-1}{\ln x} = \ln 2
+\]
+\end{prob}
+\medskip
+
+\begin{prob}{Day 1-4}
+다음을 파인만의 트릭으로 계산해보자.
+\[
+\int_{0}^{1}\dd{x} \frac{\cos x}{x^2+1} = \frac{\pi}{e}
+\]
+\end{prob}
+\medskip
+
+\begin{prob}{Day 1-5}
+다음을 파인만의 트릭으로 계산해보자.
+\[
+\int_{0}^{\infty}\dd{x} e^{-x^2}\cos 2x = \frac{\sqrt{\pi}}{2e}
+\]
+\end{prob}
+\medskip
+
+
+
+\end{document}
