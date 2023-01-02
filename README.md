@@ -33,14 +33,14 @@
     </tr>
     <tr align="center">
       <td rowspan="2">1월 3일 (화)</td>
-      <td align="left">행렬의 기초와 벡터 공간</td>
+      <td align="left">대칭과 군의 도입</td>
       <td rowspan="2">3 · 4교시</td>
       <td rowspan="2">7 · 8교시</td>
       <td rowspan="2">TBA</td>
       <!-- <td rowspan="2"><a href="https://github.com/absolux-jm/math-travel-2022/blob/main/day2-algebra/algebra.pdf">algebra.pdf</a></td> -->
     </tr>
     <tr>
-      <td>대칭과 군의 도입</td>
+      <td>행렬의 기초와 벡터 공간</td>
     </tr>
     <tr align="center">
       <td rowspan="2">1월 4일 (수)</td>
