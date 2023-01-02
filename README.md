@@ -26,8 +26,7 @@
       <td align="left">복소함수와 복소적분</td>
       <td rowspan="2">1 · 2교시</td>
       <td rowspan="2">5 · 6교시</td>
-      <td rowspan="2">TBA</td>
-      <!-- <td rowspan="2"><a href="https://github.com/absolux-jm/math-travel-2022/blob/main/day1-integration/integration.pdf">integration.pdf</a></td> -->
+      <td rowspan="2"><a href="https://github.com/absolux-jm/math-travel-2022/blob/main/day1-integration/integration.pdf">integration.pdf</a></td>
     </tr>
     <tr>
       <td>파인만의 트릭</td>
